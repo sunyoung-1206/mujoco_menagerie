@@ -1,0 +1,55 @@
+<mujoco model="go2_flat_isaaclab">
+  <!--
+    Unitree Go2 - Isaac Lab flat env sim-to-sim 씬
+
+    Isaac Lab DCMotorCfg 매칭:
+      - Kp=25, Kd=0.6, effort_limit=23.5 N·m, velocity_limit=30 rad/s
+      - dt=0.005s, decimation=4 → policy 50Hz
+      - joint damping/armature/frictionloss → play_mujoco.py에서 0으로 설정
+      - DCMotor velocity saturation → play_mujoco.py에서 구현
+
+    Contact 설정 (sim-to-sim 연구 기반):
+      - cone=elliptic: 더 정확한 마찰 원뿔
+      - impratio=100: 발 미끄럼 방지 (PhysX rigid contact 근사)
+      - 지면 friction=1.0 (Isaac Lab terrain physics_material 기준)
+  -->
+
+  <compiler angle="radian" autolimits="true"/>
+
+  <option timestep="0.005"
+          integrator="Euler"
+          gravity="0 0 -9.81"
+          cone="elliptic"
+          impratio="100"
+          iterations="50"
+          ls_iterations="50"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient"
+             rgb1="0.4 0.6 0.8" rgb2="0.05 0.05 0.1"
+             width="512" height="512"/>
+    <texture name="groundplane" type="2d" builtin="checker"
+             rgb1="0.35 0.4 0.35" rgb2="0.45 0.5 0.45"
+             markrgb="0.6 0.6 0.6"
+             width="512" height="512"/>
+    <material name="groundplane" texture="groundplane"
+              texrepeat="4 4" texuniform="true" reflectance="0.05"/>
+  </asset>
+
+  <include file="go2.xml"/>
+
+  <worldbody>
+    <light name="sun" pos="0 0 6" dir="-0.4 -0.3 -1" directional="true"
+           diffuse="0.9 0.9 0.9" specular="0.3 0.3 0.3" castshadow="true"/>
+    <light name="fill" pos="3 -3 4" directional="false"
+           diffuse="0.3 0.3 0.3" specular="0 0 0"/>
+    <geom name="floor" type="plane" size="20 20 0.1"
+          material="groundplane" friction="1.0 0.005 0.0001"/>
+  </worldbody>
+
+</mujoco>

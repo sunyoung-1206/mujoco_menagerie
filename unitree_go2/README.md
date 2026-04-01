@@ -48,6 +48,28 @@ A version of the Unitree Go2 model for use in MJX is available in `scene_mjx.xml
   <img src="go2_mjx.png" width="800">
 </p>
 
+## Custom Scenes
+
+> [!NOTE]
+> The following scene files were added in this fork and are not part of the original MuJoCo Menagerie repository.
+
+### `go2_scene.xml` — Isaac Lab Sim-to-Sim Scene
+
+A scene configured to match the Isaac Lab flat-env setup for sim-to-sim transfer.
+
+**Physics settings:**
+- `timestep=0.005`, `integrator=Euler`, policy at 50 Hz (decimation=4)
+- `cone=elliptic`, `impratio=100` — approximates PhysX rigid contact to reduce foot slippage
+- Ground `friction=1.0` matching Isaac Lab `terrain.physics_material`
+
+**Motor settings** (matched to `DCMotorCfg`):
+- Kp=25, Kd=0.6, effort\_limit=23.5 N·m, velocity\_limit=30 rad/s
+- Joint damping/armature/frictionloss are zeroed out at runtime via `play_mujoco.py`; DCMotor velocity saturation is also handled there
+
+### `go2_white_bg.xml` — White Background Scene
+
+A minimal scene with a plain white background and bright lighting, intended for clean visual rendering or documentation screenshots.
+
 ## License
 
 This model is released under a [BSD-3-Clause License](LICENSE).
